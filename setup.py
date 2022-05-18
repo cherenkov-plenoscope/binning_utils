@@ -15,7 +15,6 @@ setuptools.setup(
     },
     author="Sebastian Achim Mueller",
     author_email="sebastian-achim.mueller@mpi-hd.mpg.de",
-    license="MIT",
     packages=["binning_utils",],
     install_requires=[],
     classifiers=[
