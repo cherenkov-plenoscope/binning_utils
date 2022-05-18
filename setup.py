@@ -4,7 +4,7 @@ with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="binning_utils_relleums",
+    name="binning_utils_sebastian-achim-mueller",
     version="0.0.1",
     description="Helps you with bin-edges, -centers, and more.",
     long_description=long_description,
