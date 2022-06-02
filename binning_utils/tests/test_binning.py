@@ -112,3 +112,10 @@ def test_merge_margin():
         edges = binu.merge_low_high_edges(
             low=low, high=high + 0.1, max_relative_margin=1e-2
         )
+
+
+def test_strict():
+    assert binu.is_strictly_monotonic_increasing([0, 1, 2])
+    assert not binu.is_strictly_monotonic_increasing([0, 0])
+    assert not binu.is_strictly_monotonic_increasing([0, -1])
+    assert not binu.is_strictly_monotonic_increasing([0, 1, 2, 2, 3])

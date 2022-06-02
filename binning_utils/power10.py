@@ -96,3 +96,43 @@ def space(
             decade=combi[0], bin=combi[1], num_bins_per_decade=combi[2]
         )
     return out
+
+
+def find_upper_decade_and_bin(x, num_bins_per_decade=5):
+    """
+    Returns the bin's upper edge (decade, bin) to include value x.
+    """
+    decade = int(np.log10(x))
+    bin_factor = lower_bin_edge(
+        decade=0, bin=1, num_bins_per_decade=num_bins_per_decade,
+    )
+    xn = float(x / (10 ** decade))
+    b = 0
+    while b < num_bins_per_decade:
+        xn = xn / bin_factor
+        b += 1
+        if xn < 1.0:
+            return decade, b
+    return decade, b
+
+
+def find_lower_decade_and_bin(x, num_bins_per_decade=5):
+    """
+    Returns the bin's lower edge (decade, bin) to include value x.
+    """
+    upper = find_upper_decade_and_bin(
+        x=x, num_bins_per_decade=num_bins_per_decade
+    )
+    return decrease_decade_bin(
+        decade=upper[0], bin=upper[1], num_bins_per_decade=num_bins_per_decade
+    )
+
+
+def decrease_decade_bin(decade, bin, num_bins_per_decade):
+    """
+    Returns the next lower bin-edge's (decade, bin).
+    """
+    if bin == 0:
+        return decade - 1, num_bins_per_decade - 1
+    else:
+        return decade, bin - 1

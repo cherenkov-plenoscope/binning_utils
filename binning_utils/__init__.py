@@ -101,6 +101,14 @@ def _relative_deviation(a, b):
     return np.abs(a - b) / np.abs(0.5 * (a + b))
 
 
+def is_strictly_monotonic_increasing(x):
+    assert len(x) >= 2
+    for i in range(len(x) - 1):
+        if x[i + 1] <= x[i]:
+            return False
+    return True
+
+
 def merge_low_high_edges(low, high, max_relative_margin=1e-2):
     """
     Merge the low and high edges of bins into an array of bin edges.
@@ -121,11 +129,11 @@ def merge_low_high_edges(low, high, max_relative_margin=1e-2):
         The edges of the N bins, strictly monotonic increasing.
     """
     assert len(low) == len(high)
-    assert np.all(
-        np.gradient(low) > 0
+    assert is_strictly_monotonic_increasing(
+        low
     ), "Expected low-edges to be strictly monotonic increasing."
-    assert np.all(
-        np.gradient(high) > 0
+    assert is_strictly_monotonic_increasing(
+        high
     ), "Expected high-edges to be strictly monotonic increasing."
 
     N = len(low)
@@ -141,3 +149,33 @@ def merge_low_high_edges(low, high, max_relative_margin=1e-2):
         ), "Expected bin-edges to have no gaps and no overlaps."
 
     return bin_edges
+
+
+def max_lowest_edge(multiple_edges):
+    """
+    Returns the max. lower bin-edge from a list of multiple bin-edges.
+
+    Parameters
+    ----------
+    multiple_edges : list of N arrays
+    """
+    lowest_edges = []
+    for x in multiple_edges:
+        assert is_strictly_monotonic_increasing(x)
+        lowest_edges.append(x[0])
+    return np.max(lowest_edges)
+
+
+def min_highest_edge(multiple_edges):
+    """
+    Returns the min. highest bin-edge from a list of multiple bin-edges.
+
+    Parameters
+    ----------
+    multiple_edges : list of N arrays
+    """
+    highest_edges = []
+    for x in multiple_edges:
+        assert is_strictly_monotonic_increasing(x)
+        highest_edges.append(x[-1])
+    return np.min(highest_edges)
