@@ -36,34 +36,6 @@ def test_power10_lower_bin_edge_decade():
     assert edge == 10.0
 
 
-def test_power10_invalid_bin():
-    with pytest.raises(AssertionError) as e:
-        binu.power10.lower_bin_edge(decade=-1, bin=5, num_bins_per_decade=5)
-
-    with pytest.raises(AssertionError) as e:
-        binu.power10.lower_bin_edge(decade=-1, bin=-1, num_bins_per_decade=5)
-
-
-def test_power10_space():
-    space = binu.power10.space(
-        start_decade=0,
-        start_bin=0,
-        stop_decade=3,
-        stop_bin=0,
-        num_bins_per_decade=5,
-    )
-    assert len(space) == 15
-
-    actual_power_ratios = space[1:] / space[0:-1]
-    desired_power_ratio = binu.power10.lower_bin_edge(
-        decade=0, bin=1, num_bins_per_decade=5,
-    )
-
-    np.testing.assert_allclose(
-        actual=actual_power_ratios, desired=desired_power_ratio,
-    )
-
-
 def test_merge_strictly_monotonic_input():
     strictly_monotonic_increasing = np.linspace(0, 1, 5)
     strictly_monotonic_decreasing = np.linspace(0, 1, 5)
