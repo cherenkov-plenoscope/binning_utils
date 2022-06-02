@@ -54,14 +54,61 @@ def test_power10_space():
     )
     assert len(space) == 15
 
-    actual_power_ratios = (space[1:] / space[0:-1])
+    actual_power_ratios = space[1:] / space[0:-1]
     desired_power_ratio = binu.power10.lower_bin_edge(
-        decade=0,
-        bin=1,
-        num_bins_per_decade=5,
+        decade=0, bin=1, num_bins_per_decade=5,
     )
 
     np.testing.assert_allclose(
-        actual=actual_power_ratios,
-        desired=desired_power_ratio,
+        actual=actual_power_ratios, desired=desired_power_ratio,
     )
+
+
+def test_merge_strictly_monotonic_input():
+    strictly_monotonic_increasing = np.linspace(0, 1, 5)
+    strictly_monotonic_decreasing = np.linspace(0, 1, 5)
+    constant = np.ones(5)
+
+    with pytest.raises(AssertionError) as e:
+        binu.merge_low_high_edges(
+            low_edges=constant, high_edges=strictly_monotonic_increasing
+        )
+
+    with pytest.raises(AssertionError) as e:
+        binu.merge_low_high_edges(
+            low_edges=strictly_monotonic_increasing, high_edges=constant
+        )
+
+    with pytest.raises(AssertionError) as e:
+        binu.merge_low_high_edges(
+            low_edges=strictly_monotonic_increasing,
+            high_edges=strictly_monotonic_decreasing,
+        )
+
+    with pytest.raises(AssertionError) as e:
+        binu.merge_low_high_edges(
+            low_edges=strictly_monotonic_decreasing,
+            high_edges=strictly_monotonic_increasing,
+        )
+
+    with pytest.raises(AssertionError) as e:
+        binu.merge_low_high_edges(
+            low_edges=strictly_monotonic_decreasing,
+            high_edges=strictly_monotonic_decreasing,
+        )
+
+
+def test_merge_margin():
+    low = np.linspace(1, 10, 10)
+    high = np.linspace(2, 11, 10)
+
+    edges = binu.merge_low_high_edges(low_edges=low, high_edges=high)
+    assert len(edges) == 11
+
+    for i, edge in enumerate(edges):
+        assert edge == i + 1
+
+    with pytest.raises(AssertionError) as e:
+        edges = binu.merge_low_high_edges(
+            low_edges=low, high_edges=high + 0.1, max_relative_margin=1e-2
+        )
