@@ -25,7 +25,7 @@ def lower_bin_edge(decade, bin, num_bins_per_decade=5):
     """
     assert num_bins_per_decade > 0
     assert 0 <= bin < num_bins_per_decade
-    return 10 ** (decade + np.linspace(0, 1, num_bins_per_decade + 1))[bin]
+    return 10 ** (decade + (bin/num_bins_per_decade))
 
 
 def make_decade_and_bin_combinations(
@@ -47,19 +47,16 @@ def make_decade_and_bin_combinations(
     A list of input-parameters to lower_bin_edge().
     """
     combos = []
-    decade = start_decade
+
     assert 0 <= stop_bin < num_bins_per_decade
     assert 0 <= start_bin < num_bins_per_decade
     assert start_decade <= stop_decade
 
-    bin = start_bin
-    while decade != stop_decade or bin != stop_bin:
-        combos.append((decade, bin, num_bins_per_decade))
-        if bin + 1 < num_bins_per_decade:
-            bin += 1
-        else:
-            bin = 0
-            decade += 1
+    d = start_decade
+    b = start_bin
+    while decade_bin_is_less((d, b), (stop_decade, stop_bin)):
+        combos.append((d, b))
+        d, b = decade_bin_increase(d, b, num_bins_per_decade)
     return combos
 
 
@@ -93,7 +90,7 @@ def space(
     out = np.nan * np.ones(len(combis))
     for i, combi in enumerate(combis):
         out[i] = lower_bin_edge(
-            decade=combi[0], bin=combi[1], num_bins_per_decade=combi[2]
+            decade=combi[0], bin=combi[1], num_bins_per_decade=num_bins_per_decade
         )
     return out
 
@@ -123,12 +120,22 @@ def find_lower_decade_and_bin(x, num_bins_per_decade=5):
     upper = find_upper_decade_and_bin(
         x=x, num_bins_per_decade=num_bins_per_decade
     )
-    return decrease_decade_bin(
+    return decade_bin_decrease(
         decade=upper[0], bin=upper[1], num_bins_per_decade=num_bins_per_decade
     )
 
 
-def decrease_decade_bin(decade, bin, num_bins_per_decade):
+def decade_bin_increase(decade, bin, num_bins_per_decade):
+    """
+    Returns the next higher bin-edge's (decade, bin).
+    """
+    if bin == num_bins_per_decade - 1:
+        return decade + 1, 0
+    else:
+        return decade, bin + 1
+
+
+def decade_bin_decrease(decade, bin, num_bins_per_decade):
     """
     Returns the next lower bin-edge's (decade, bin).
     """
@@ -136,3 +143,16 @@ def decrease_decade_bin(decade, bin, num_bins_per_decade):
         return decade - 1, num_bins_per_decade - 1
     else:
         return decade, bin - 1
+
+
+def decade_bin_is_less(dec_bin_A, dec_bin_B):
+    decA = dec_bin_A[0]
+    decB = dec_bin_B[0]
+    binA = dec_bin_A[1]
+    binB = dec_bin_B[1]
+    if decA < decB:
+        return True
+    elif decA == decB:
+        return binA < binB
+    else:
+        return False
