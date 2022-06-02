@@ -101,15 +101,15 @@ def _relative_deviation(a, b):
     return np.abs(a - b) / np.abs(0.5 * (a + b))
 
 
-def merge_low_high_edges(low_edges, high_edges, max_relative_margin=1e-2):
+def merge_low_high_edges(low, high, max_relative_margin=1e-2):
     """
     Merge the low and high edges of bins into an array of bin edges.
 
     Parameters
     ----------
-    low_edges : array(N)
+    low : array(N)
         The low edges of the bins. Must be strictly monotonic increasing.
-    high_edges : array(N)
+    high : array(N)
         The high edges of the bins. Must be strictly monotonic increasing.
     max_relative_margin : float
         The relative deviation of the edges of two neigboring bins must not
@@ -120,23 +120,23 @@ def merge_low_high_edges(low_edges, high_edges, max_relative_margin=1e-2):
     bin_edges : array(N + 1)
         The edges of the N bins, strictly monotonic increasing.
     """
-    assert len(low_edges) == len(high_edges)
+    assert len(low) == len(high)
     assert np.all(
-        np.gradient(low_edges) > 0
-    ), "Expected low_edges to be strictly monotonic increasing."
+        np.gradient(low) > 0
+    ), "Expected low-edges to be strictly monotonic increasing."
     assert np.all(
-        np.gradient(high_edges) > 0
-    ), "Expected high_edges to be strictly monotonic increasing."
+        np.gradient(high) > 0
+    ), "Expected high-edges to be strictly monotonic increasing."
 
-    N = len(low_edges)
+    N = len(low)
     bin_edges = np.zeros(N + 1)
     for n in range(N):
-        bin_edges[n] = low_edges[n]
-    bin_edges[N] = high_edges[N - 1]
+        bin_edges[n] = low[n]
+    bin_edges[N] = high[N - 1]
 
     for n in range(N):
         assert (
-            _relative_deviation(a=bin_edges[n + 1], b=high_edges[n])
+            _relative_deviation(a=bin_edges[n + 1], b=high[n])
             < max_relative_margin
         ), "Expected bin-edges to have no gaps and no overlaps."
 

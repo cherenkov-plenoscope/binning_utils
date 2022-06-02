@@ -71,30 +71,30 @@ def test_merge_strictly_monotonic_input():
 
     with pytest.raises(AssertionError) as e:
         binu.merge_low_high_edges(
-            low_edges=constant, high_edges=strictly_monotonic_increasing
+            low=constant, high=strictly_monotonic_increasing
         )
 
     with pytest.raises(AssertionError) as e:
         binu.merge_low_high_edges(
-            low_edges=strictly_monotonic_increasing, high_edges=constant
+            low=strictly_monotonic_increasing, high=constant
         )
 
     with pytest.raises(AssertionError) as e:
         binu.merge_low_high_edges(
-            low_edges=strictly_monotonic_increasing,
-            high_edges=strictly_monotonic_decreasing,
+            low=strictly_monotonic_increasing,
+            high=strictly_monotonic_decreasing,
         )
 
     with pytest.raises(AssertionError) as e:
         binu.merge_low_high_edges(
-            low_edges=strictly_monotonic_decreasing,
-            high_edges=strictly_monotonic_increasing,
+            low=strictly_monotonic_decreasing,
+            high=strictly_monotonic_increasing,
         )
 
     with pytest.raises(AssertionError) as e:
         binu.merge_low_high_edges(
-            low_edges=strictly_monotonic_decreasing,
-            high_edges=strictly_monotonic_decreasing,
+            low=strictly_monotonic_decreasing,
+            high=strictly_monotonic_decreasing,
         )
 
 
@@ -102,7 +102,7 @@ def test_merge_margin():
     low = np.linspace(1, 10, 10)
     high = np.linspace(2, 11, 10)
 
-    edges = binu.merge_low_high_edges(low_edges=low, high_edges=high)
+    edges = binu.merge_low_high_edges(low=low, high=high)
     assert len(edges) == 11
 
     for i, edge in enumerate(edges):
@@ -110,5 +110,5 @@ def test_merge_margin():
 
     with pytest.raises(AssertionError) as e:
         edges = binu.merge_low_high_edges(
-            low_edges=low, high_edges=high + 0.1, max_relative_margin=1e-2
+            low=low, high=high + 0.1, max_relative_margin=1e-2
         )
