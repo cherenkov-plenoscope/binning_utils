@@ -5,7 +5,7 @@ with open("README.rst", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="binning_utils_sebastian-achim-mueller",
-    version="0.0.5",
+    version="0.0.6",
     description="Helps you with bin-edges, -centers, and more.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
