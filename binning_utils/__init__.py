@@ -179,3 +179,49 @@ def min_highest_edge(multiple_edges):
         assert is_strictly_monotonic_increasing(x)
         highest_edges.append(x[-1])
     return np.min(highest_edges)
+
+
+def Binning(bin_edges, weight_lower_edge=0.5):
+    """
+    A handy dict with the most common properties of a binning.
+
+    Parameters
+    ----------
+    bin_edges : array of (N + 1) floats
+        The edges of the N bins, strictly_monotonic_increasing.
+    weight_lower_edge : float
+        Give weight to either prefer the lower, or the upper edge of the bin
+        when computing 'centers'.
+
+    Returns
+    -------
+    bins : dict
+        num : int
+            Number of bins (N).
+        edges : array of (N + 1) floats
+            Original bin-edges.
+        centers : array of N floats
+            Weighted centers of the bins.
+        widths : array of N floats
+            Width of the bins.
+        start : float
+            Lowest bin-edge
+        stop : float
+            Highest bin-edge
+        limits : tuple(start, stop)
+            Lowest and highest bin-edges.
+    """
+    assert is_strictly_monotonic_increasing(bin_edges)
+    b = {}
+    b["num"] = len(bin_edges) - 1
+    b["edges"] = bin_edges
+    b["centers"] = centers(bin_edges=bin_edges, weight_lower_edge=weight_lower_edge)
+    b["widths"] = widths(bin_edges=bin_edges)
+    b["start"] = bin_edges[0]
+    b["stop"] = bin_edges[-1]
+    b["limits"] = [b["start"], b["stop"]]
+    if np.all(bin_edges > 0.0):
+        b["decade_start"] = 10 ** np.floor(np.log10(b["start"]))
+        b["decade_stop"] = 10 ** np.ceil(np.log10(b["stop"]))
+        b["decade_limits"] = [b["decade_start"], b["decade_stop"]]
+    return b
