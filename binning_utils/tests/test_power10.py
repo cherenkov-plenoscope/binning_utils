@@ -33,6 +33,7 @@ def test_make_space_combis_invalid():
             num_bins_per_decade=5,
         )
 
+
 def test_make_space_combis():
     combis = binu.power10.make_decade_and_bin_combinations(
         start_decade=0,
@@ -80,7 +81,6 @@ def test_power10_space():
     )
 
 
-
 def test_find_upper_lower():
     x = 1.0
     d, b = binu.power10.find_upper_decade_and_bin(x=x, num_bins_per_decade=5)
@@ -92,8 +92,7 @@ def test_find_upper_lower():
 
 def test_find_upper_lower_exotic():
     d, b = binu.power10.find_upper_decade_and_bin(
-        x=0.3e-9,
-        num_bins_per_decade=5
+        x=0.3e-9, num_bins_per_decade=5
     )
     assert d == -9, b == 2
 

@@ -25,7 +25,7 @@ def lower_bin_edge(decade, bin, num_bins_per_decade=5):
     """
     assert num_bins_per_decade > 0
     assert 0 <= bin < num_bins_per_decade
-    return 10 ** (decade + (bin/num_bins_per_decade))
+    return 10 ** (decade + (bin / num_bins_per_decade))
 
 
 def make_decade_and_bin_combinations(
@@ -90,7 +90,9 @@ def space(
     out = np.nan * np.ones(len(combis))
     for i, combi in enumerate(combis):
         out[i] = lower_bin_edge(
-            decade=combi[0], bin=combi[1], num_bins_per_decade=num_bins_per_decade
+            decade=combi[0],
+            bin=combi[1],
+            num_bins_per_decade=num_bins_per_decade,
         )
     return out
 

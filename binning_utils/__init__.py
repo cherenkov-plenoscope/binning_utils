@@ -215,7 +215,9 @@ def Binning(bin_edges, weight_lower_edge=0.5):
     b = {}
     b["num"] = len(bin_edges) - 1
     b["edges"] = bin_edges
-    b["centers"] = centers(bin_edges=bin_edges, weight_lower_edge=weight_lower_edge)
+    b["centers"] = centers(
+        bin_edges=bin_edges, weight_lower_edge=weight_lower_edge
+    )
     b["widths"] = widths(bin_edges=bin_edges)
     b["start"] = bin_edges[0]
     b["stop"] = bin_edges[-1]
