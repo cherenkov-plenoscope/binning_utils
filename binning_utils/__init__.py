@@ -221,7 +221,7 @@ def Binning(bin_edges, weight_lower_edge=0.5):
     b["widths"] = widths(bin_edges=bin_edges)
     b["start"] = bin_edges[0]
     b["stop"] = bin_edges[-1]
-    b["limits"] = [b["start"], b["stop"]]
+    b["limits"] = np.array([b["start"], b["stop"]])
     if np.all(bin_edges > 0.0):
         b["decade_start"] = 10 ** np.floor(np.log10(b["start"]))
         b["decade_stop"] = 10 ** np.ceil(np.log10(b["stop"]))
