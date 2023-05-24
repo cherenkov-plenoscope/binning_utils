@@ -227,3 +227,16 @@ def Binning(bin_edges, weight_lower_edge=0.5):
         b["decade_stop"] = 10 ** np.ceil(np.log10(b["stop"]))
         b["decade_limits"] = [b["decade_start"], b["decade_stop"]]
     return b
+
+
+def edges_from_width_and_num(bin_width, num_bins, first_bin_center):
+    """
+    Estimates the edges of bins based on the 'bin_width', their number and the
+    center of the firs bin.
+    """
+    bin_edges = np.linspace(
+        start=first_bin_center + bin_width * (-0.5),
+        stop=first_bin_center + bin_width * (num_bins + 0.5),
+        num=num_bins + 1,
+    )
+    return bin_edges
