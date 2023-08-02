@@ -1,6 +1,6 @@
 Binning Utils
 =============
-|BlackStyle|
+|BlackStyle| |CiStatus|
 
 A collection of tools to help with binning.
 
@@ -17,3 +17,6 @@ Create binning with power-space which is aligned to decades.
 
 .. |BlackStyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
+
+.. |CiStatus| image:: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/ci.yml/badge.svg?branch=main&event=push
+   :target: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/ci.yml
