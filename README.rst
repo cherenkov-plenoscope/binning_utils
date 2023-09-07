@@ -29,3 +29,6 @@ Create binning with power-space which is aligned to decades.
 
 .. |TestStatus| image:: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml/badge.svg?branch=main&event=push
    :target: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml
+
+.. |PyPiStatus| image:: https://img.shields.io/pypi/v/binning-utils-sebastian-achim-mueller
+   :target: https://pypi.org/project/binning-utils-sebastian-achim-mueller/
