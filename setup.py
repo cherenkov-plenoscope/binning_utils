@@ -6,7 +6,7 @@ with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
-with open(os.path.join("mypackage", "version.py")) as f:
+with open(os.path.join("binning_utils", "version.py")) as f:
     txt = f.read()
     last_line = txt.splitlines()[-1]
     version_string = last_line.split()[-1]
