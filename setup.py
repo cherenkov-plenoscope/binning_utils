@@ -1,11 +1,21 @@
 import setuptools
+import os
+
 
 with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+
+with open(os.path.join("mypackage", "version.py")) as f:
+    txt = f.read()
+    last_line = txt.splitlines()[-1]
+    version_string = last_line.split()[-1]
+    version = version_string.strip("\"'")
+
+
 setuptools.setup(
     name="binning_utils_sebastian-achim-mueller",
-    version="0.0.8",
+    version=version,
     description="Helps you with bin-edges, -centers, and more.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -16,6 +26,7 @@ setuptools.setup(
     author="Sebastian Achim Mueller",
     author_email="sebastian-achim.mueller@mpi-hd.mpg.de",
     packages=["binning_utils",],
+    package_data={"binning_utils": []},
     install_requires=[],
     classifiers=[
         "Programming Language :: Python :: 3",

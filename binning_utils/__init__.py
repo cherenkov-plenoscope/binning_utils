@@ -1,5 +1,6 @@
-import numpy as np
+from .version import __version__
 from . import power10
+import numpy as np
 
 
 def centers(bin_edges, weight_lower_edge=0.5):
