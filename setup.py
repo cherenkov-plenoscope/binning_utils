@@ -2,8 +2,8 @@ import setuptools
 import os
 
 
-with open("README.rst", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+with open("README.rst", "r", encoding="utf-8") as f:
+    long_description = f.read()
 
 
 with open(os.path.join("binning_utils", "version.py")) as f:
@@ -20,12 +20,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/cherenkov-plenoscope/binning_utils",
-    project_urls={
-        "Bug Tracker": "https://github.com/cherenkov-plenoscope/binning_utils/issues",
-    },
     author="Sebastian Achim Mueller",
     author_email="sebastian-achim.mueller@mpi-hd.mpg.de",
-    packages=["binning_utils",],
+    packages=[
+        "binning_utils",
+    ],
     package_data={"binning_utils": []},
     install_requires=[],
     classifiers=[

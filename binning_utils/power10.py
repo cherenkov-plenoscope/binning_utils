@@ -103,9 +103,11 @@ def find_upper_decade_and_bin(x, num_bins_per_decade=5):
     """
     decade = int(np.log10(x))
     bin_factor = lower_bin_edge(
-        decade=0, bin=1, num_bins_per_decade=num_bins_per_decade,
+        decade=0,
+        bin=1,
+        num_bins_per_decade=num_bins_per_decade,
     )
-    xn = float(x / (10 ** decade))
+    xn = float(x / (10**decade))
     b = 0
     while b < num_bins_per_decade:
         xn = xn / bin_factor

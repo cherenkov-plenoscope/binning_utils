@@ -73,11 +73,14 @@ def test_power10_space():
 
     actual_power_ratios = space[1:] / space[0:-1]
     desired_power_ratio = binu.power10.lower_bin_edge(
-        decade=0, bin=1, num_bins_per_decade=5,
+        decade=0,
+        bin=1,
+        num_bins_per_decade=5,
     )
 
     np.testing.assert_allclose(
-        actual=actual_power_ratios, desired=desired_power_ratio,
+        actual=actual_power_ratios,
+        desired=desired_power_ratio,
     )
 
 

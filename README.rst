@@ -25,10 +25,10 @@ Create binning with power-space which is aligned to decades.
 
 
 .. |BlackStyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
+    :target: https://github.com/psf/black
 
-.. |TestStatus| image:: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml/badge.svg?branch=main&event=push
-   :target: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml
+.. |TestStatus| image:: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml/badge.svg?branch=main
+    :target: https://github.com/cherenkov-plenoscope/binning_utils/actions/workflows/test.yml
 
-.. |PyPiStatus| image:: https://img.shields.io/pypi/v/binning-utils-sebastian-achim-mueller
-   :target: https://pypi.org/project/binning-utils-sebastian-achim-mueller/
+.. |PyPiStatus| image:: https://img.shields.io/pypi/v/binning_utils_sebastian-achim-mueller
+    :target: https://pypi.org/project/binning_utils_sebastian-achim-mueller
