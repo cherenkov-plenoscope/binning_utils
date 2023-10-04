@@ -1,5 +1,6 @@
 from .version import __version__
 from . import power10
+from . import sphere
 import numpy as np
 
 
