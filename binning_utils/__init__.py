@@ -243,3 +243,31 @@ def edges_from_width_and_num(bin_width, num_bins, first_bin_center):
         num=num_bins + 1,
     )
     return bin_edges
+
+
+def query_ball(bin_edges, start, stop):
+    """
+    Returns the indices of the bins which are touching the range from
+    ``start`` to ``stop``.
+
+    Parameters
+    ----------
+    bin_edges : array_like (N + 1) floats
+        Edges of N bins.
+    start : float
+        Start of the range.
+    stop : float
+        Stop of the range.
+
+    Returns
+    -------
+    bin_indices : array_like ints
+        The indices touching the range from start to stop.
+    """
+    assert start <= stop
+    num_bins = len(bin_edges) - 1
+    bin_start = np.digitize(x=start, bins=bin_edges) - 1
+    bin_stop = np.digitize(x=stop, bins=bin_edges) - 1
+    ee = np.arange(bin_start, bin_stop + 1, 1)
+    mask = np.logical_and(ee >= 0, ee < num_bins)
+    return ee[mask]
