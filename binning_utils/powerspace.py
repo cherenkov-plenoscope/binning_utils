@@ -30,3 +30,32 @@ def powerspace(start, stop, power_slope, size):
     else:
         ll = stop / start
         return start * ll**rd
+
+
+def spacing(start, stop, x, power_slope):
+    """
+    Parameters
+    ----------
+    start : float
+        Start of the bin
+    stop : float
+        Stop of the bin
+    x : float
+        Value
+    power_slope : float
+        Slope of the power law.
+
+    Returns
+    -------
+    pos : float
+        The position where x has to be put in the linear interval from start to
+        stop.
+    """
+    if power_slope != -1.0:
+        inv_slex = power_slope + 1.0
+        p_x = x**inv_slex
+        p_start = start**inv_slex
+        p_stop = stop**inv_slex
+        return (p_x - p_start) / (p_stop - p_start)
+    else:
+        return np.log(x / start) / np.log(stop / start)
