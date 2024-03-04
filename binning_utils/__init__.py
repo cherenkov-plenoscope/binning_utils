@@ -1,7 +1,7 @@
 from .version import __version__
 from . import power10
+from . import power
 from . import sphere
-from .powerspace import powerspace
 import numpy as np
 
 

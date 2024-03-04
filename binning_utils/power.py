@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def powerspace(start, stop, power_slope, size):
+def space(start, stop, power_slope, size):
     """
     Parameters
     ----------
