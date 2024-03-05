@@ -81,6 +81,7 @@ def query_ball(bin_edges, start, stop, power_slope):
     """
     num_bins = len(bin_edges) - 1
     assert num_bins >= 1
+    assert stop >= start
 
     bins = []
     weights = []
