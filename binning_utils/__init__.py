@@ -271,3 +271,39 @@ def query_ball(bin_edges, start, stop):
     ee = np.arange(bin_start, bin_stop + 1, 1)
     mask = np.logical_and(ee >= 0, ee < num_bins)
     return ee[mask]
+
+
+def draw_random_bin(prng, bin_apertures, size=None):
+    """
+    Draws a random bin from multiple bins with different apertures.
+    The relative apertures of the bins is proportional to the probability
+    of the bins being drawn.
+    Defining bins by their apertures is useful in case one dimensional
+    bin_edges are not applicable in case the bins represent areas, solid angles
+    or other apertures of higher dimensions.
+
+    Parameters
+    ----------
+    prng : numpy.random.Generator
+        Pseudo random number generator.
+    bin_apertures : array_like, floats
+        The apertues of the bins. If the bins are one dimensional, this
+        is simply the widths of the bins. Apertures must be >= 0.
+    size : int or None (default None)
+        Number of bins to be drawn. Adopted from numpy.random.
+        If None, the return value is scalar.
+
+    Returns
+    -------
+    bin index : int
+        Index of bin
+    """
+    bin_apertures = np.asarray(bin_apertures)
+    assert np.all(bin_apertures >= 0.0)
+    assert len(bin_apertures) > 0
+    bin_order = np.arange(len(bin_apertures))
+    prng.shuffle(bin_order)
+    cc = np.cumsum(bin_apertures[bin_order])
+    cc_max = cc[-1]
+    c = prng.uniform(low=0.0, high=cc_max, size=size)
+    return bin_order[np.digitize(c, bins=cc)]
