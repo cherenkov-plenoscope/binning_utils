@@ -307,3 +307,36 @@ def draw_random_bin(prng, bin_apertures, size=None):
     cc_max = cc[-1]
     c = prng.uniform(low=0.0, high=cc_max, size=size)
     return bin_order[np.digitize(c, bins=cc)]
+
+
+def mask_fewest_bins_to_contain_quantile(bin_counts, quantile):
+    """
+    Parameters
+    ----------
+    bin_counts : array_like
+        Content of the bins. With bin_counts >= 0. This is e.g. the result
+        of a histogram.
+    quantile : float
+        Quantile to be contained. 0.0 <= quantile <= 1.0
+
+    Returns
+    -------
+    mask : array_like bools
+        Masks the fewest bins which contain the desired quantile.
+        I.e. it first masks the bins with many counts before it masks the
+        bins with fewer counts.
+    """
+    assert 0.0 <= quantile <= 1.0
+    bin_counts = np.asarray(bin_counts).copy()
+
+    osort = np.argsort((-1) * bin_counts)
+    part = 0.0
+    target = quantile * np.sum(bin_counts)
+    mask = np.zeros(bin_counts.shape[0], dtype=bool)
+    for ii in range(len(osort)):
+        if part + bin_counts[osort[ii]] < target:
+            part += bin_counts[osort[ii]]
+            mask[osort[ii]] = True
+        else:
+            break
+    return mask
