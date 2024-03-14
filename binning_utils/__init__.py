@@ -340,3 +340,42 @@ def mask_fewest_bins_to_contain_quantile(bin_counts, quantile):
         else:
             break
     return mask
+
+
+def mask_fullest_bins_to_cover_aperture(bin_counts, bin_apertures, aperture):
+    """
+    Parameters
+    ----------
+    bin_counts : array_like, floats
+        Content of the bins. With bin_counts >= 0. This is e.g. the result
+        of a histogram.
+    bin_apertures : array_like, floats
+        The apertues of the bins. If the bins are one dimensional, this
+        is simply the widths of the bins. Apertures must be > 0.
+    aperture : float
+        The total aperture to be covered.
+        With 0.0 <= aperture <= sum(bin_apertures).
+
+    Returns
+    -------
+    mask : array_like, bools
+        Masks the fullest bins which cover the desired aperture.
+    """
+    bin_counts = np.asarray(bin_counts).copy()
+    bin_apertures = np.asarray(bin_apertures).copy()
+
+    assert np.all(bin_apertures > 0.0)
+    assert np.all(bin_counts >= 0.0)
+    assert 0.0 <= aperture <= np.sum(bin_apertures)
+    assert len(bin_counts) == len(bin_apertures)
+
+    mask = np.zeros(len(bin_counts), dtype=bool)
+    bin_counts_descending = np.argsort((-1) * bin_counts)
+
+    current_aperture = 0.0
+    for ibin in bin_counts_descending:
+        if current_aperture < aperture:
+            mask[ibin] = True
+            current_aperture += bin_apertures[ibin]
+
+    return mask
