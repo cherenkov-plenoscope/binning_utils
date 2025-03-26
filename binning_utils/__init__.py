@@ -379,3 +379,78 @@ def mask_fullest_bins_to_cover_aperture(bin_counts, bin_apertures, aperture):
             current_aperture += bin_apertures[ibin]
 
     return mask
+
+
+def quantile(bin_edges, bin_counts, q):
+    """
+    Parameters
+    ----------
+    bin_edges : array_like, floats
+        Edges of the bins.
+    bin_counts : array_like, floats
+        Counts / values in the bins.
+    q : float
+        The quantile to be contained [0, 1].
+
+    Returns
+    -------
+    quantile : float
+        Value along the bin_dges that contains quantile 'q' of 'bin_counts'.
+    """
+    assert 0.0 <= q <= 1.0
+    bin_edges = np.asarray(bin_edges)
+    bin_counts = np.asarray(bin_counts)
+
+    assert is_strictly_monotonic_increasing(bin_edges)
+    assert np.all(bin_counts >= 0.0)
+
+    num_bins = len(bin_counts)
+    assert num_bins + 1 == len(bin_edges)
+
+    if q == 0.0:
+        return bin_edges[0]
+
+    total = np.sum(bin_counts)
+
+    if total == 0:
+        return bin_edges[0]
+
+    bin_qs = bin_counts / total
+    accumulated_q = 0.0
+
+    for i in range(num_bins):
+        accumulated_q, bin_weight = _next_q_and_weight(
+            accumulated_q=accumulated_q,
+            bin_q=bin_qs[i],
+            q=q,
+        )
+        if accumulated_q == q:
+            break
+
+    return centers(
+        bin_edges=[bin_edges[i], bin_edges[i + 1]],
+        weight_lower_edge=(1 - bin_weight),
+    )[0]
+
+
+def _next_q_and_weight(
+    accumulated_q,
+    bin_q,
+    q,
+):
+    assert 0 <= accumulated_q <= 1
+    assert 0 <= bin_q <= 1
+    assert 0 < q <= 1
+
+    missing_q = q - accumulated_q
+    assert missing_q > 0
+
+    if bin_q > 0:
+        weight = np.min([missing_q / bin_q, 1])
+    else:
+        weight = 0
+
+    if weight == 1:
+        return accumulated_q + bin_q, 1
+    else:
+        return q, weight

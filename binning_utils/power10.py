@@ -2,6 +2,7 @@
 A binning that has its edges aligned with the decade.
 Choose how many bins you want within a decade and query the edges of the bins.
 """
+
 import numpy as np
 
 
