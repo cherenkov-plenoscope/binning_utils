@@ -62,3 +62,18 @@ def test_quantile_bell():
 
     x = binu.quantile(bin_edges=x_bin["edges"], bin_counts=f, q=0.5 + 0.68 / 2)
     np.testing.assert_almost_equal(desired=mu + sigma, actual=x, decimal=3)
+
+
+def test_zeros_in_bin_counts():
+    x_bin = np.linspace(0, 1, 11)
+    f = [0, 0, 2, 0, 0, 0, 6, 7, 100, 9]
+    x = binu.quantile(bin_edges=x_bin, bin_counts=f, q=0.5)
+    assert 0.8 < x < 0.9
+
+    f = [100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    x = binu.quantile(bin_edges=x_bin, bin_counts=f, q=0.5)
+    assert 0.0 < x < 0.1
+
+    f = [0, 0, 0, 0, 0, 0, 0, 0, 0, 100]
+    x = binu.quantile(bin_edges=x_bin, bin_counts=f, q=0.5)
+    assert 0.9 < x < 1.0

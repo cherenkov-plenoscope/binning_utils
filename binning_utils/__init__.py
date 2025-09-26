@@ -416,41 +416,23 @@ def quantile(bin_edges, bin_counts, q):
         return bin_edges[0]
 
     bin_qs = bin_counts / total
-    accumulated_q = 0.0
 
+    # find the first bin 'i' to exceed the quantile
+    bin_qs_cumsum = np.cumsum(bin_qs)
     for i in range(num_bins):
-        accumulated_q, bin_weight = _next_q_and_weight(
-            accumulated_q=accumulated_q,
-            bin_q=bin_qs[i],
-            q=q,
-        )
-        if accumulated_q == q:
+        if bin_qs_cumsum[i] > q:
             break
+
+    if i > 0:
+        q_accumulated_before_i = bin_qs_cumsum[i - 1]
+    else:
+        q_accumulated_before_i = 0.0
+
+    q_missing = q - q_accumulated_before_i
+
+    bin_weight = np.min([q_missing / bin_qs[i], 1])
 
     return centers(
         bin_edges=[bin_edges[i], bin_edges[i + 1]],
         weight_lower_edge=(1 - bin_weight),
     )[0]
-
-
-def _next_q_and_weight(
-    accumulated_q,
-    bin_q,
-    q,
-):
-    assert 0 <= accumulated_q <= 1
-    assert 0 <= bin_q <= 1
-    assert 0 < q <= 1
-
-    missing_q = q - accumulated_q
-    assert missing_q > 0
-
-    if bin_q > 0:
-        weight = np.min([missing_q / bin_q, 1])
-    else:
-        weight = 0
-
-    if weight == 1:
-        return accumulated_q + bin_q, 1
-    else:
-        return q, weight
