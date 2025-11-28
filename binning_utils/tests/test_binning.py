@@ -91,3 +91,25 @@ def test_strict():
     assert not binu.is_strictly_monotonic_increasing([0, 0])
     assert not binu.is_strictly_monotonic_increasing([0, -1])
     assert not binu.is_strictly_monotonic_increasing([0, 1, 2, 2, 3])
+
+
+def test_find_start_stop():
+    with pytest.raises(AssertionError):
+        _ = binu.find_bin_with_start_stop_in_edges(
+            bin_edges=[1, 2, 3], start=2.05, stop=3
+        )
+
+    b = binu.find_bin_with_start_stop_in_edges(
+        bin_edges=[1, 2, 3], start=2, stop=3, max_relative_margin=0.1
+    )
+    assert b == 1
+
+    b = binu.find_bin_with_start_stop_in_edges(
+        bin_edges=[1, 2, 3], start=1, stop=2
+    )
+    assert b == 0
+
+    with pytest.raises(AssertionError):
+        _ = binu.find_bin_with_start_stop_in_edges(
+            bin_edges=[1, 2, 3], start=1, stop=3
+        )

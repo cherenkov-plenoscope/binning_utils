@@ -70,6 +70,41 @@ def find_bin_in_edges(bin_edges, value):
     return False, upper_bin_edge - 1, False
 
 
+def find_bin_with_start_stop_in_edges(
+    bin_edges, start, stop, max_relative_margin=1e-2
+):
+    """
+    Returns the index of the bin in 'edges' which matches the 'start' and
+    'stop' up to a certain 'max_relative_margin'.
+
+    Parameters
+    ----------
+    bin_edges : array like
+        Edges of bins
+    start : float
+        Start of bin.
+    stop : float
+        Stop of bin.
+    max_relative_margin : float
+        Max allowed relative difference of desired and actual bin start/stop
+
+    Returns
+    -------
+    bin_index : int
+    """
+    bin_edges = np.asarray(bin_edges)
+    num_bins = len(bin_edges) - 1
+
+    for bin_index in range(num_bins):
+        bin_start = bin_edges[bin_index]
+        bin_stop = bin_edges[bin_index + 1]
+        if _relative_deviation(bin_start, start) < max_relative_margin:
+            if _relative_deviation(bin_stop, stop) < max_relative_margin:
+                return bin_index
+
+    assert False, "Did not find a matching bin"
+
+
 def find_bins_in_centers(bin_centers, value):
     """
     Compute the weighted distance to the supports of the bins.
