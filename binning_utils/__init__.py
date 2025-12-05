@@ -471,3 +471,60 @@ def quantile(bin_edges, bin_counts, q):
         bin_edges=[bin_edges[i], bin_edges[i + 1]],
         weight_lower_edge=(1 - bin_weight),
     )[0]
+
+
+def find_bin_indices_in_start_stop_range(
+    bin_edges, start, stop, return_if_bin_is_fully_contained=False
+):
+    """
+    Find the indices of the bins wich are inside the range [start, stop).
+
+    Parameters
+    ----------
+    bin_edges : array like
+        Edges of the bins. Must be strictly monotonically increasing.
+    start : float
+        Beginning of the range (included)
+    stop : float
+        End of the range (excluded)
+    return_if_bin_is_fully_contained : bool (default: False)
+        If true, an additional list of bools is returned to indicate if the bin
+        is fully (true) or only partly (false) contained in the range defined
+        by [start, stop).
+
+    Returns
+    -------
+    indices_of_bins : array like
+        Indices of bins relative to 'bin_edges'
+
+    if return_if_bin_is_fully_contained == True:
+    (indices_of_bins, mask_if_fully_contained) : ([ints], [bools])
+    """
+    assert stop >= start
+    num_bins = len(bin_edges) - 1
+    assert num_bins > 0, "Expected at least two bin edges."
+
+    bin_indices = []
+    bin_fully_contained = []
+
+    for i in range(num_bins):
+        bin_start = bin_edges[i]
+        bin_stop = bin_edges[i + 1]
+        assert (
+            bin_stop > bin_start
+        ), "Expected 'bin_edges' to increase strictly monotonically."
+
+        has_bin_start = start <= bin_start < stop
+        has_bin_stop = start < bin_stop <= stop
+
+        if has_bin_start or has_bin_stop:
+            bin_indices.append(i)
+            if has_bin_start and has_bin_stop:
+                bin_fully_contained.append(True)
+            else:
+                bin_fully_contained.append(False)
+
+    if return_if_bin_is_fully_contained:
+        return bin_indices, bin_fully_contained
+    else:
+        return bin_indices
